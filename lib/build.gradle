@@ -56,19 +56,37 @@ publishing {
     publications {
         myLibrary(MavenPublication) {
             from components.java
+            pom {
+                name = 'Selva OSS'
+                description = 'Collection of libraries that make backend DX an oasis.'
+                url = 'https://github.com/selvasuriyanadar/selva-oss'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'selvasuriyanadar'
+                        name = 'Selvasuriya Nadar'
+                        email = 'selvasuriya001@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/selvasuriyanadar/selva-oss.git'
+                    developerConnection = 'scm:git:https://github.com/selvasuriyanadar/selva-oss.git'
+                    url = 'https://github.com/selvasuriyanadar/selva-oss'
+                }
+            }
         }
     }
 
     repositories {
-        /*maven {
-            url = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
-            credentials {
-                username = 'selvasuriya'
-                password = '59uc4ckFJYc%'
-            }
-        }*/
         maven {
-            url = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+            def deployUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            url = version.endsWith('SNAPSHOT') ? snapshotsUrl : deployUrl
             credentials {
                 username = 'selvasuriya'
                 password = '59uc4ckFJYc%'
