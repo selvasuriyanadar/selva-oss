@@ -15,6 +15,8 @@ plugins {
 
     id 'maven-publish'
 
+    id 'signing'
+
 }
 
 repositories {
@@ -42,7 +44,12 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-group = 'org.thamizhkuri.oss'
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+group = 'io.github.selvasuriyanadar'
 version = '1.0'
 
 publishing {
@@ -51,4 +58,26 @@ publishing {
             from components.java
         }
     }
+
+    repositories {
+        /*maven {
+            url = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+            credentials {
+                username = 'selvasuriya'
+                password = '59uc4ckFJYc%'
+            }
+        }*/
+        maven {
+            url = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            credentials {
+                username = 'selvasuriya'
+                password = '59uc4ckFJYc%'
+            }
+        }
+    }
+
+}
+
+signing {
+    sign publishing.publications.myLibrary
 }
