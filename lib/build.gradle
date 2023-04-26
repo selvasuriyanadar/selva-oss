@@ -42,7 +42,7 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-group = 'org.thamizhkuri.lib'
+group = 'org.thamizhkuri.oss'
 version = '1.0'
 
 publishing {
