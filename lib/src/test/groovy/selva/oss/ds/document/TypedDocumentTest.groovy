@@ -8,11 +8,15 @@ import spock.lang.Specification
 class TypedDocumentTest extends Specification {
 
     private enum Field {
-        stringField, longField, integerField, floatField
+        stringField, longField, integerField, floatField, enumField, listField
+    }
+
+    private enum TestEnum {
+        CAT, DOG, PARROT, PEACOCK
     }
 
     public static TypedDocument initialisingWithFieldsConfig() {
-        return new TypedDocument(Field.class, new FieldsConfig().add(Field.stringField, DataTypeConfig.createString()).add(Field.longField, DataTypeConfig.createLong()).add(Field.integerField, DataTypeConfig.createInteger()).add(Field.floatField, DataTypeConfig.createFloat()));
+        return new TypedDocument(Field.class, new FieldsConfig().add(Field.stringField, DataTypeConfig.createString()).add(Field.longField, DataTypeConfig.createLong()).add(Field.integerField, DataTypeConfig.createInteger()).add(Field.floatField, DataTypeConfig.createFloat()).add(Field.enumField, DataTypeConfig.createEnum(TestEnum.class)).add(Field.listField, DataTypeConfig.createList(DataTypeConfig.createInteger())));
     }
 
     def "initialising with FieldsConfig"() {
@@ -39,6 +43,9 @@ class TypedDocumentTest extends Specification {
         Field.longField | 83483L
         Field.integerField | 38383
         Field.floatField | 343.44F
+        Field.enumField | TestEnum.DOG
+        Field.listField | [1,3,4,5]
+        Field.listField | []
     }
 
     def "setting fields nullable"() {
@@ -64,6 +71,11 @@ class TypedDocumentTest extends Specification {
         Field.integerField | null
         Field.floatField | 343.44F
         Field.floatField | null
+        Field.enumField | TestEnum.DOG
+        Field.enumField | null
+        Field.listField | [1,3,4,5]
+        Field.listField | null
+        Field.listField | []
     }
 
     def "getting fields sure"() {
@@ -84,6 +96,9 @@ class TypedDocumentTest extends Specification {
         Field.longField | 83483L
         Field.integerField | 38383
         Field.floatField | 343.44F
+        Field.enumField | TestEnum.DOG
+        Field.listField | [1,3,4,5]
+        Field.listField | []
     }
 
     def "optionally getting fields"() {
@@ -111,6 +126,11 @@ class TypedDocumentTest extends Specification {
         Field.integerField | Optional.empty()
         Field.floatField | Optional.of(343.33F)
         Field.floatField | Optional.empty()
+        Field.enumField | Optional.of(TestEnum.DOG)
+        Field.enumField | Optional.empty()
+        Field.listField | Optional.of([1,3,4,5])
+        Field.listField | Optional.empty()
+        Field.listField | Optional.of([])
     }
 
 }

@@ -103,7 +103,7 @@ public class TypedValueLogic {
 
     private static DataTypeConfig inferCollectionDataTypeStatic(Field field) {
         return DataType.inferDataTypeConfigForCollectionDataType(
-                () -> DataType.List.getDataTypeClass().equals(field.getType()) ? Optional.of(new CollectionParams(inferSimpleDataTypeByType(((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0]))) : Optional.empty());
+                () -> DataType.canDataTypeClassOverride(DataType.List, field.getType()) ? Optional.of(new CollectionParams(inferSimpleDataTypeByType(((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0]))) : Optional.empty());
     }
 
     public static DataTypeConfig inferDataTypeStatic(Field field) {
@@ -118,7 +118,7 @@ public class TypedValueLogic {
 
     private static DataTypeConfig inferCollectionDataTypeDynamic(Object value) {
         return DataType.inferDataTypeConfigForCollectionDataType(
-                () -> DataType.List.getDataTypeClass().equals(value.getClass()) ? Optional.of(new CollectionParams(inferSimpleDataTypeDynamic(((List) value).get(0)))) : Optional.empty());
+                () -> DataType.canDataTypeClassOverride(DataType.List, value.getClass()) ? Optional.of(new CollectionParams(inferSimpleDataTypeDynamic(((List) value).get(0)))) : Optional.empty());
     }
 
     public static DataTypeConfig inferDataTypeDynamic(Object value) {
