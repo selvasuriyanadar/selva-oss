@@ -14,6 +14,10 @@ interface StoreGetApi<T> {
 
     public DataTypeConfig getConfig(String field);
 
+    public boolean isFieldPresent(String field);
+
+    public void verifyFieldExist(String field);
+
 }
 
 interface StoreGetOps extends DocumentBaseApi, DocumentStore<String> {
@@ -28,6 +32,19 @@ interface StoreGetOps extends DocumentBaseApi, DocumentStore<String> {
 
     default DataTypeConfig getConfig(String field) {
         return fetchConfigSure(DocumentParamsStateValidator.createWithValidField(field));
+    }
+
+    default boolean isFieldPresent(String field) {
+        return containsField(DocumentParamsStateValidator.createWithField(field));
+    }
+
+    public static class FieldDoesNotExistException extends RuntimeException {
+    }
+
+    default void verifyFieldExist(String field) {
+        if (!isFieldPresent(field)) {
+            throw new FieldDoesNotExistException();
+        }
     }
 
 }

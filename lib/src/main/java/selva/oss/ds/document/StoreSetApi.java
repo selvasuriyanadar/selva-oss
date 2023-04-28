@@ -39,6 +39,7 @@ interface StoreSetOps extends DocumentBaseApi, DocumentStore<String> {
     }
 
     default void setTypedValueOptional(String field, Optional<TypedValue> typedValue) {
+        validateNotNull(typedValue);
         if (!typedValue.isPresent()) {
             return;
         }

@@ -36,12 +36,9 @@ class PojoDocumentImpl implements DocumentBaseImpl {
         return Optional.of(new TypedValue(fetchConfigSure(field), this.reflectiveData.get(field)));
     }
 
-    public static class ValueDoesNotExistException extends RuntimeException {
-    }
-
     public TypedValue fetchTypedValueSure(String field) {
         if (!containsValue(field)) {
-            throw new ValueDoesNotExistException();
+            throw new DocumentBase.ValueDoesNotExistException();
         }
         return new TypedValue(fetchConfigSure(field), this.reflectiveData.get(field));
     }
@@ -53,12 +50,9 @@ class PojoDocumentImpl implements DocumentBaseImpl {
         return Optional.of(TypedValueLogic.inferDataTypeStatic(this.reflectiveData.getDeclaredField(field)));
     }
 
-    public static class ConfigDoesNotExistException extends RuntimeException {
-    }
-
     public DataTypeConfig fetchConfigSure(String field) {
         if (!containsField(field)) {
-            throw new ConfigDoesNotExistException();
+            throw new DocumentBase.ConfigDoesNotExistException();
         }
         return TypedValueLogic.inferDataTypeStatic(this.reflectiveData.getDeclaredField(field));
     }

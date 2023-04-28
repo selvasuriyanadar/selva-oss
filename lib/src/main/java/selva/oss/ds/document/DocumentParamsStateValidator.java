@@ -62,11 +62,16 @@ public class DocumentParamsStateValidator {
     private Validation<String> newFieldValidation;
     private Validation<TypedValue> validTypedValueValidation;
 
+    private Validation<String> fieldValidation;
     private Validation<DataTypeConfig> dataTypeConfigValidation;
     private Validation<Object> valueValidation;
 
     public static DocumentParamsStateValidator createWithValidField(String validField) {
         return new DocumentParamsStateValidator().setValidField(validField);
+    }
+
+    public static DocumentParamsStateValidator createWithField(String field) {
+        return new DocumentParamsStateValidator().setField(field);
     }
 
     public static DocumentParamsStateValidator createWithNewFieldAndDataTypeConfig(String newField, DataTypeConfig dataTypeConfig) {
@@ -122,6 +127,18 @@ public class DocumentParamsStateValidator {
 
     public TypedValue getValidTypedValue(DocumentBase document) {
         return validateNullableValidation(document, this.validTypedValueValidation);
+    }
+
+    private DocumentParamsStateValidator setField(String field) {
+        this.fieldValidation = document -> {
+            validateNotNull(field);
+            return field;
+        };
+        return this;
+    }
+
+    public String getField(DocumentBase document) {
+        return validateNullableValidation(document, this.fieldValidation);
     }
 
     private DocumentParamsStateValidator setDataTypeConfig(DataTypeConfig dataTypeConfig) {

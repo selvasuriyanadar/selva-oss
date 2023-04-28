@@ -8,4 +8,8 @@ import java.util.*;
 
 public interface Store<T> extends StoreGetApi<T>, StoreSetApi<T> {
 
+    public static Store<String> create(Object object) {
+        return new PojoDocumentImpl(object);
+    }
+
 }

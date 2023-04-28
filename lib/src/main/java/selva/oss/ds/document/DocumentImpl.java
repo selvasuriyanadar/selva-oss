@@ -29,12 +29,9 @@ class DocumentImpl implements DocumentBaseImpl {
         return Optional.of(data.get(field));
     }
 
-    public static class ValueDoesNotExistException extends RuntimeException {
-    }
-
     public TypedValue fetchTypedValueSure(String field) {
         if (!containsValue(field)) {
-            throw new ValueDoesNotExistException();
+            throw new DocumentBase.ValueDoesNotExistException();
         }
         return data.get(field);
     }
@@ -46,12 +43,9 @@ class DocumentImpl implements DocumentBaseImpl {
         return Optional.of(dataTypeConfigs.get(field));
     }
 
-    public static class ConfigDoesNotExistException extends RuntimeException {
-    }
-
     public DataTypeConfig fetchConfigSure(String field) {
         if (!containsField(field)) {
-            throw new ConfigDoesNotExistException();
+            throw new DocumentBase.ConfigDoesNotExistException();
         }
         return dataTypeConfigs.get(field);
     }

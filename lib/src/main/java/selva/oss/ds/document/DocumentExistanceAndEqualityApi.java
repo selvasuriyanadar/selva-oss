@@ -8,7 +8,9 @@ import java.util.*;
 
 interface DocumentExistanceAndEqualityApi<T> {
 
-    public boolean isPresent(T field);
+    default boolean isPresent(T field) {
+        throw new HasNotBeenImplementedException();
+    }
 
     default boolean isEqual(DocumentStore<T> inData, T field) {
         throw new HasNotBeenImplementedException();

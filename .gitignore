@@ -5,3 +5,4 @@ gradle.properties
 # Ignore Gradle build output directory
 build
 lib/s01.oss.sonatype.org
+*.swp

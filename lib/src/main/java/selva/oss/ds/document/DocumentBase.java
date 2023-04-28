@@ -10,6 +10,8 @@ interface DocumentBaseApi {
 
     public boolean containsValue(DocumentParamsStateValidator documentParamsStateValidator);
 
+    public boolean containsField(DocumentParamsStateValidator documentParamsStateValidator);
+
     public TypedValue fetchTypedValueSure(DocumentParamsStateValidator documentParamsStateValidator);
 
     public Optional<TypedValue> fetchTypedValue(DocumentParamsStateValidator documentParamsStateValidator);
@@ -30,6 +32,12 @@ interface DocumentBaseImpl extends DocumentBase, DocumentBaseApi, DocumentGetAnd
         final String field = documentParamsStateValidator.getValidField(this);
 
         return containsValue(field);
+    }
+
+    default boolean containsField(DocumentParamsStateValidator documentParamsStateValidator) {
+        final String field = documentParamsStateValidator.getField(this);
+
+        return containsField(field);
     }
 
     default TypedValue fetchTypedValueSure(DocumentParamsStateValidator documentParamsStateValidator) {
@@ -81,11 +89,17 @@ interface DocumentBase {
 
     public Optional<TypedValue> fetchTypedValue(String field);
 
-    public TypedValue fetchTypedValueSure(String field);
+    public static class ValueDoesNotExistException extends RuntimeException {
+    }
+
+    public TypedValue fetchTypedValueSure(String field) throws ValueDoesNotExistException;
 
     public Optional<DataTypeConfig> fetchConfig(String field);
 
-    public DataTypeConfig fetchConfigSure(String field);
+    public static class ConfigDoesNotExistException extends RuntimeException {
+    }
+
+    public DataTypeConfig fetchConfigSure(String field) throws ConfigDoesNotExistException;
 
     public void putTypedValue(String field, TypedValue typedValue);
 

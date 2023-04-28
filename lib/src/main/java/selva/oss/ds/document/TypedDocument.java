@@ -81,7 +81,7 @@ public class TypedDocument<T extends Enum<T>> implements Document<T> {
         getDocument().setNullable(field.toString(), value);
     }
 
-    public Stream<T> streamExpectedFields() {
+    private Stream<T> streamExpectedFields() {
         return Arrays.asList(keyClass.getEnumConstants()).stream();
     }
 
@@ -92,21 +92,21 @@ public class TypedDocument<T extends Enum<T>> implements Document<T> {
     public <U extends Enum<U>> TypedDocument<T> merge(TypedDocument<U> typedDocument) {
         validateNotNull(typedDocument);
 
-        typedDocument.streamExpectedFields().forEach(field -> { getDocument().setTypedValueOptional(field.toString(), typedDocument.getDocument()); });
+        typedDocument.streamExpectedFields().filter(field -> getDocument().isFieldPresent(field.toString())).forEach(field -> { getDocument().setTypedValueOptional(field.toString(), typedDocument.getDocument()); });
         return this;
     }
 
     public TypedDocument<T> pull(Store<String> store) {
         validateNotNull(store);
 
-        streamExpectedFields().forEach(field -> { getDocument().setTypedValueOptional(field.toString(), store); });
+        streamExpectedFields().forEach(field -> { store.verifyFieldExist(field.toString()); getDocument().setTypedValueOptional(field.toString(), store); });
         return this;
     }
 
     public Store<String> push(Store<String> store) {
         validateNotNull(store);
 
-        streamExpectedFields().forEach(field -> { store.setTypedValueOptional(field.toString(), getDocument()); });
+        streamExpectedFields().forEach(field -> { store.verifyFieldExist(field.toString()); store.setTypedValueOptional(field.toString(), getDocument()); });
         return store;
     }
 
