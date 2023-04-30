@@ -21,6 +21,12 @@ class PojoDocumentImpl implements DocumentBaseImpl {
         this.reflectiveData = new ReflectiveData(object);
     }
 
+    public PojoDocumentImpl(Class pojoClass) {
+        validateNotNull(pojoClass);
+
+        this.reflectiveData = new ReflectiveData(pojoClass);
+    }
+
     public boolean containsField(String field) {
         return this.reflectiveData.containsField(field);
     }

@@ -12,4 +12,8 @@ public interface Store<T> extends StoreGetApi<T>, StoreSetApi<T> {
         return new PojoDocumentImpl(object);
     }
 
+    public static Store<String> create(Class pojoClass) {
+        return new PojoDocumentImpl(pojoClass);
+    }
+
 }

@@ -4,6 +4,7 @@ import static selva.oss.lang.CommonValidation.*;
 
 import java.util.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 public class ReflectiveData {
 
@@ -15,6 +16,23 @@ public class ReflectiveData {
 
         this.object = object;
         this.pojoClass = object.getClass();
+    }
+
+    public static class CouldNotInstantiateObjectException extends RuntimeException {
+        public CouldNotInstantiateObjectException() {
+            super("A Default constructor that is public is expected in the pojo.");
+        }
+    }
+
+    public ReflectiveData(Class pojoClass) {
+        validateNotNull(pojoClass);
+
+        this.pojoClass = pojoClass;
+        try {
+            this.object = this.pojoClass.getConstructor().newInstance();
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new CouldNotInstantiateObjectException();
+        }
     }
 
     public boolean containsField(String field) {
