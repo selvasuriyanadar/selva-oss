@@ -22,15 +22,30 @@ public class TypedDocument<T extends Enum<T>> implements Document<T> {
         this(keyClass);
         validateNotNull(fieldsConfig);
 
-        streamExpectedFields().forEach(field -> { getDocument().defineFieldType(fieldsConfig.fetchSure(field)); });
+        initialiseFromFieldsConfig(fieldsConfig);
     }
 
     public <U extends Enum<U>> TypedDocument(Class<T> keyClass, TypedDocument<U> typedDocument) {
         this(keyClass);
         validateNotNull(typedDocument);
 
-        streamExpectedFields().forEach(field -> { getDocument().defineFieldType(field.toString(), typedDocument.getDocument()); });
-        pull(typedDocument.getDocument());
+        initialiseFromStore(typedDocument.getDocument());
+    }
+
+    public <U extends Enum<U>> TypedDocument(Class<T> keyClass, Store<String> store) {
+        this(keyClass);
+        validateNotNull(store);
+
+        initialiseFromStore(store);
+    }
+
+    private void initialiseFromFieldsConfig(FieldsConfig<T> fieldsConfig) {
+        streamExpectedFields().forEach(field -> { getDocument().defineFieldType(fieldsConfig.fetchSure(field)); });
+    }
+
+    private void initialiseFromStore(Store<String> store) {
+        streamExpectedFields().forEach(field -> { getDocument().defineFieldType(field.toString(), store); });
+        pull(store);
     }
 
     private DocumentStore<String> getDocument() {
