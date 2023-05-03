@@ -1,6 +1,6 @@
 package selva.oss.ds.document;
 
-import static selva.oss.lang.CommonValidation.*;
+import static selva.oss.lang.Commons.*;
 import selva.oss.ds.document.datatype.DataTypeConfig;
 import selva.oss.ds.document.datatype.TypedValue;
 

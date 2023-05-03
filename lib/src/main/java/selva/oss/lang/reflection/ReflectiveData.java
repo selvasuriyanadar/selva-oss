@@ -1,6 +1,6 @@
 package selva.oss.lang.reflection;
 
-import static selva.oss.lang.CommonValidation.*;
+import static selva.oss.lang.Commons.*;
 
 import java.util.*;
 import java.lang.reflect.Field;

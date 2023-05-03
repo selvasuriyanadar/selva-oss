@@ -1,6 +1,6 @@
 package selva.oss.ds.document.datatype;
 
-import static selva.oss.lang.CommonValidation.*;
+import static selva.oss.lang.Commons.*;
 import selva.oss.lang.Collections;
 import static selva.oss.ds.document.datatype.DataType.EnumParams;
 import static selva.oss.ds.document.datatype.DataType.CollectionParams;

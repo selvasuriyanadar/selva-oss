@@ -3,7 +3,7 @@ package selva.oss.lang;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class CommonValidation {
+public class Commons {
 
     public static class Nothing {
 
