@@ -41,11 +41,23 @@ public class Commons {
     public static class CommonValidationFailedException extends RuntimeException {
 
         public enum CommonValidationFailedState {
-            NullNotExpected, UnexpectedType
+            NullNotExpected, UnexpectedType, CaseNotHandled
         }
+
+        private CommonValidationFailedState commonValidationFailedState;
 
         public CommonValidationFailedException(CommonValidationFailedState commonValidationFailedState) {
             super(commonValidationFailedState.toString());
+            this.commonValidationFailedState = commonValidationFailedState;
+        }
+
+        public CommonValidationFailedException(CommonValidationFailedState commonValidationFailedState, String message) {
+            super(message);
+            this.commonValidationFailedState = commonValidationFailedState;
+        }
+
+        public CommonValidationFailedState getCommonValidationFailedState() {
+            return this.commonValidationFailedState;
         }
 
     }
@@ -57,9 +69,18 @@ public class Commons {
     }
 
     public static void validateType(Class valueType, Object value) {
+        validateNotNull(valueType);
+
         if (!valueType.isInstance(value)) {
             throw new CommonValidationFailedException(CommonValidationFailedException.CommonValidationFailedState.UnexpectedType);
         }
+    }
+
+    public static <T extends Enum<T>> CommonValidationFailedException throwCaseNotHandledException(T notHandledCase) {
+        validateNotNull(notHandledCase);
+
+        return new CommonValidationFailedException(CommonValidationFailedException.CommonValidationFailedState.CaseNotHandled,
+                "Case " + notHandledCase.toString() + " is not handled.");
     }
 
     public static class HasNotBeenImplementedException extends RuntimeException {
