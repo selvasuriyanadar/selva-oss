@@ -5,17 +5,16 @@ import selva.oss.lang.CommonValidations;
 
 public class ExceptionHandler {
 
-    public interface Operation {
-        public void operate();
+    public interface Operation<T> {
+        public T operate();
     }
 
-    public static OpsResult toOpsResult(Operation operation, String errorMessage) {
+    public static <T> OpsResult<T> toOpsResult(Operation<T> operation, String errorMessage) {
         try {
             validateNotNull(operation);
             validateNotNull(errorMessage);
 
-            operation.operate();
-            return OpsResult.success();
+            return OpsResult.success(operation.operate());
         }
         catch (CommonValidations.NullNotExpectedException | CommonValidations.InvalidStateException e) {
             return OpsResult.error(e.getMessage());

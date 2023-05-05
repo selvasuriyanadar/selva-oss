@@ -11,17 +11,19 @@ public class CurdOps {
     public static class RecordNotInsertedException extends RuntimeException {
     }
 
-    private static void throwIfRecordNotInserted(InsertingRecord insertingRecord) {
-        if (insertingRecord.insert() < 0) {
+    private static int throwIfRecordNotInserted(InsertingRecord insertingRecord) {
+        int id = insertingRecord.insert();
+        if (id < 0) {
             throw new RecordNotInsertedException();
         }
+        return id;
     }
 
-    public static OpsResult insert(InsertingRecord insertingRecord, String errorMessage) {
+    public static OpsResult<Integer> insert(InsertingRecord insertingRecord, String errorMessage) {
         return ExceptionHandler.toOpsResult(() -> {
             validateNotNull(insertingRecord);
 
-            throwIfRecordNotInserted(insertingRecord);
+            return throwIfRecordNotInserted(insertingRecord);
         }, errorMessage);
     }
 

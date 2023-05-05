@@ -1,16 +1,22 @@
 package selva.oss.lang.operation;
 
-public class OpsResult {
+public class OpsResult<T> {
 
     public enum Status {
         Success, Error
     }
 
     private Status status;
+    private T data;
     private String errorMessage;
 
     private OpsResult(Status status) {
         this.status = status;
+    }
+
+    private OpsResult(Status status, T data) {
+        this.status = status;
+        this.data = data;
     }
 
     private OpsResult(Status status, String errorMessage) {
@@ -26,11 +32,19 @@ public class OpsResult {
         return errorMessage;
     }
 
-    public static OpsResult success() {
+    public T getData() {
+        return data;
+    }
+
+    public static <T> OpsResult<T> success() {
         return new OpsResult(Status.Success);
     }
 
-    public static OpsResult error(String errorMessage) {
+    public static <T> OpsResult<T> success(T data) {
+        return new OpsResult(Status.Success, data);
+    }
+
+    public static <T> OpsResult<T> error(String errorMessage) {
         return new OpsResult(Status.Error, errorMessage);
     }
 
