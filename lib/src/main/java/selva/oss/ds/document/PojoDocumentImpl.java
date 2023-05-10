@@ -2,9 +2,9 @@ package selva.oss.ds.document;
 
 import static selva.oss.lang.Commons.*;
 import selva.oss.lang.reflection.ReflectiveData;
-import selva.oss.ds.document.datatype.DataTypeConfig;
-import selva.oss.ds.document.datatype.TypedValue;
-import selva.oss.ds.document.datatype.TypedValueLogic;
+import selva.oss.ds.datatype.DataTypeConfig;
+import selva.oss.ds.datatype.TypedValue;
+import selva.oss.ds.datatype.TypedValueLogic;
 
 import java.util.*;
 

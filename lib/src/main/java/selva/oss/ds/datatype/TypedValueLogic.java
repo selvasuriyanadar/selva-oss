@@ -1,9 +1,9 @@
-package selva.oss.ds.document.datatype;
+package selva.oss.ds.datatype;
 
 import static selva.oss.lang.Commons.*;
 import selva.oss.lang.Collections;
-import static selva.oss.ds.document.datatype.DataType.EnumParams;
-import static selva.oss.ds.document.datatype.DataType.CollectionParams;
+import static selva.oss.ds.datatype.DataType.EnumParams;
+import static selva.oss.ds.datatype.DataType.CollectionParams;
 
 import java.util.*;
 import java.util.stream.Stream;

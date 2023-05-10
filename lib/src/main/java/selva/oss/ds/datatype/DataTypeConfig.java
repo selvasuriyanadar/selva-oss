@@ -1,4 +1,4 @@
-package selva.oss.ds.document.datatype;
+package selva.oss.ds.datatype;
 
 import static selva.oss.lang.Commons.*;
 

@@ -1,7 +1,7 @@
 package selva.oss.ds.document
 
-import selva.oss.ds.document.datatype.DataTypeConfig;
-import selva.oss.ds.document.datatype.TypedValue;
+import selva.oss.ds.datatype.DataTypeConfig;
+import selva.oss.ds.datatype.TypedValue;
 
 import spock.lang.Specification
 
