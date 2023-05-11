@@ -149,7 +149,9 @@ public class QueryInferFromJsonLogic {
             else if (GsonUtils.doesFieldExist(JsonField.rhsField.toString(), jsonObject)) {
                 setRhsDataTypeConfig(fieldsConfig.fetchSure(QueryInferFromJsonLogic.parseField(JsonField.rhsField.toString(), jsonObject)).getDataTypeConfig());
             }
-            throw new ComparativeConditionMustHaveAtleastOneFieldException();
+            else {
+                throw new ComparativeConditionMustHaveAtleastOneFieldException();
+            }
         }
 
         private void setLhsDataTypeConfig(DataTypeConfig lhsDataTypeConfig) {
@@ -185,53 +187,53 @@ public class QueryInferFromJsonLogic {
 
     }
 
-    public static ConditionBase produceQuery(JsonObject jsonObject, FieldsConfig fieldsConfig) {
+    public static ConditionBase inferCondition(JsonObject jsonObject, FieldsConfig fieldsConfig) {
         Condition condition = parseCondition(jsonObject);
-        return produceQuery(condition, jsonObject, fieldsConfig);
+        return inferCondition(condition, jsonObject, fieldsConfig);
     }
 
-    public static ConditionBase produceQuery(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
+    public static ConditionBase inferCondition(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
         return Condition.produceByBaseConditionType(condition,
-                () -> produceQueryByBooleanConditionType(condition, jsonObject, fieldsConfig),
-                () -> produceQueryByComparativeConditionType(condition, jsonObject, fieldsConfig));
+                () -> inferConditionByBooleanConditionType(condition, jsonObject, fieldsConfig),
+                () -> inferConditionByComparativeConditionType(condition, jsonObject, fieldsConfig));
     }
 
-    private static ConditionBase produceQueryByBooleanConditionType(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
+    private static ConditionBase inferConditionByBooleanConditionType(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
         return Condition.produceByBooleanConditionType(condition,
-                () -> produceQueryByMultiBooleanConditionType(condition, jsonObject, fieldsConfig),
-                () -> produceQueryBySimpleBooleanConditionType(condition, jsonObject, fieldsConfig));
+                () -> inferConditionByMultiBooleanConditionType(condition, jsonObject, fieldsConfig),
+                () -> inferConditionBySimpleBooleanConditionType(condition, jsonObject, fieldsConfig));
     }
 
-    private static ConditionBase produceQueryByMultiBooleanConditionType(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
+    private static ConditionBase inferConditionByMultiBooleanConditionType(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
         return Condition.produceByMultiBooleanConditionType(condition,
                 () -> produceByAll((resultOld, resultNew) -> new AndCondition(Arrays.asList(resultOld, resultNew)),
                                    (resultNew, andCondition) -> andCondition.add(resultNew),
                                    ((ProduceOperation<ConditionBase>[]) GsonUtils.fetchJsonObjects(JsonField.subConditions.toString(), jsonObject)
-                                    .map(c -> ((ProduceOperation<ConditionBase>) (() -> produceQuery(c, fieldsConfig)))).toArray(ProduceOperation[]::new))),
+                                    .map(c -> ((ProduceOperation<ConditionBase>) (() -> inferCondition(c, fieldsConfig)))).toArray(ProduceOperation[]::new))),
                 () -> produceByAll((resultOld, resultNew) -> new OrCondition(Arrays.asList(resultOld, resultNew)),
                                    (resultNew, orCondition) -> orCondition.add(resultNew),
                                    ((ProduceOperation<ConditionBase>[]) GsonUtils.fetchJsonObjects(JsonField.subConditions.toString(), jsonObject)
-                                    .map(c -> ((ProduceOperation<ConditionBase>) (() -> produceQuery(c, fieldsConfig)))).toArray(ProduceOperation[]::new))));
+                                    .map(c -> ((ProduceOperation<ConditionBase>) (() -> inferCondition(c, fieldsConfig)))).toArray(ProduceOperation[]::new))));
     }
 
-    private static ConditionBase produceQueryBySimpleBooleanConditionType(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
+    private static ConditionBase inferConditionBySimpleBooleanConditionType(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
         return Condition.produceBySimpleBooleanConditionType(condition,
-                () -> new NotCondition(produceQuery(GsonUtils.fetchJsonObject(JsonField.subCondition.toString(), jsonObject), fieldsConfig)));
+                () -> new NotCondition(inferCondition(GsonUtils.fetchJsonObject(JsonField.subCondition.toString(), jsonObject), fieldsConfig)));
     }
 
-    private static ConditionBase produceQueryByComparativeConditionType(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
+    private static ConditionBase inferConditionByComparativeConditionType(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
         return Condition.produceByComparativeConditionType(condition,
-                () -> produceQueryBySimpleComparativeConditionType(condition, jsonObject, fieldsConfig),
-                () -> produceQueryByRelativeComparativeConditionType(condition, jsonObject, fieldsConfig));
+                () -> inferConditionBySimpleComparativeConditionType(condition, jsonObject, fieldsConfig),
+                () -> inferConditionByRelativeComparativeConditionType(condition, jsonObject, fieldsConfig));
     }
 
-    private static ConditionBase produceQueryBySimpleComparativeConditionType(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
+    private static ConditionBase inferConditionBySimpleComparativeConditionType(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
         return Condition.produceBySimpleComparativeConditionType(condition,
                 () -> { ComparativeConditionData comparativeConditionData = new ComparativeConditionData(jsonObject, fieldsConfig); return new EqualsCondition(comparativeConditionData.getLhsField(), comparativeConditionData.getRhsField()); },
                 () -> { ComparativeConditionData comparativeConditionData = new ComparativeConditionData(jsonObject, fieldsConfig); return new NotEqualsCondition(comparativeConditionData.getLhsField(), comparativeConditionData.getRhsField()); });
     }
 
-    private static ConditionBase produceQueryByRelativeComparativeConditionType(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
+    private static ConditionBase inferConditionByRelativeComparativeConditionType(Condition condition, JsonObject jsonObject, FieldsConfig fieldsConfig) {
         return Condition.produceByRelativeComparativeConditionType(condition,
                 () -> { ComparativeConditionData comparativeConditionData = new ComparativeConditionData(jsonObject, fieldsConfig); return new GreaterThanCondition(comparativeConditionData.getLhsField(), comparativeConditionData.getRhsField()); },
                 () -> { ComparativeConditionData comparativeConditionData = new ComparativeConditionData(jsonObject, fieldsConfig); return new GreaterThanOrEqualsCondition(comparativeConditionData.getLhsField(), comparativeConditionData.getRhsField()); },

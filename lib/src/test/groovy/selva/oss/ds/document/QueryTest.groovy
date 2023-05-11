@@ -13,8 +13,18 @@ import selva.oss.ds.field.StringField;
 import selva.oss.ds.fieldorvalue.FieldOrValue;
 
 import spock.lang.Specification
+import com.google.gson.JsonParser;
+import com.google.gson.JsonObject;
 
 class QueryTest extends Specification {
+
+    private enum Field {
+        stringField, longField, integerField, floatField, anotherLongField, anotherIntegerField
+    }
+
+    public static FieldsConfig getFieldsConfig() {
+        return new FieldsConfig().add(Field.stringField, DataTypeConfig.createString()).add(Field.longField, DataTypeConfig.createLong()).add(Field.integerField, DataTypeConfig.createInteger()).add(Field.floatField, DataTypeConfig.createFloat()).add(Field.anotherLongField, DataTypeConfig.createLong()).add(Field.anotherIntegerField, DataTypeConfig.createInteger());
+    }
 
     def "produce query assertion"() {
         setup:
@@ -41,6 +51,61 @@ class QueryTest extends Specification {
             "(float = 56.57)",
             "(integer = 56)",
             "(double = 56.57)"]
+    }
+
+    def "produce from json"() {
+        setup:
+        final JsonObject jsonObject = new JsonParser().parse(json);
+        final FieldsConfig fieldsConfig = getFieldsConfig();
+
+        when:
+        final String queryResult = QueryLogic.produceQuery(jsonObject, fieldsConfig);
+        System.out.println(queryResult);
+
+        then:
+        query.equals(queryResult)
+
+        where:
+        json << [
+        """
+            {
+                "condition": "And", "subConditions" : [
+                    { "condition": "Equals", "lhsField": "stringField", "rhsValue": "Hello, World!" },
+                    { "condition": "NotEquals", "lhsValue": 3.3334, "rhsField": "floatField" },
+                    { "condition": "GreaterThan", "lhsField": "longField", "rhsField": "anotherLongField" },
+                    { "condition": "GreaterThanOrEquals", "lhsField": "integerField", "rhsValue": 5 },
+                    { "condition": "LesserThan", "lhsField": "floatField", "rhsValue": 33.24505 },
+                    { "condition": "LesserThanOrEquals", "lhsField": "anotherIntegerField", "rhsField": "integerField" }
+                ]
+            }
+        """,
+        """
+            {
+                "condition": "And", "subConditions" : [
+                    { "condition": "Equals", "lhsField": "stringField", "rhsValue": "Hello, World!" },
+                    {
+                        "condition": "Or", "subConditions": [
+                            { "condition": "NotEquals", "lhsValue": 3.3334, "rhsField": "floatField" },
+                            {
+                                "condition": "Not", "subCondition": {
+                                    "condition": "Equals", "lhsValue": "Hai! How are you?", "rhsField": "stringField"
+                                }
+                            }
+                        ]
+                    },
+                    { "condition": "GreaterThan", "lhsField": "longField", "rhsField": "anotherLongField" },
+                    { "condition": "GreaterThanOrEquals", "lhsField": "integerField", "rhsValue": 5 },
+                    { "condition": "LesserThan", "lhsField": "floatField", "rhsValue": 33.24505 },
+                    { "condition": "LesserThanOrEquals", "lhsField": "anotherIntegerField", "rhsField": "integerField" }
+                ]
+            }
+        """
+        ]
+
+        query << [
+            "((stringField = 'Hello, World!') and (3.3334 != floatField) and (longField > anotherLongField) and (integerField >= 5) and (floatField < 33.24505) and (anotherIntegerField <= integerField))",
+            "((stringField = 'Hello, World!') and ((3.3334 != floatField) or (not ('Hai! How are you?' = stringField))) and (longField > anotherLongField) and (integerField >= 5) and (floatField < 33.24505) and (anotherIntegerField <= integerField))"
+        ]
     }
 
 }

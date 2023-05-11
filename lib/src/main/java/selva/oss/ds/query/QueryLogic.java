@@ -9,10 +9,17 @@ import selva.oss.ds.condition.MultiBooleanCondition;
 import selva.oss.ds.condition.SimpleBooleanCondition;
 import selva.oss.ds.condition.ComparativeCondition;
 import selva.oss.ds.condition.Condition;
+import selva.oss.ds.field.FieldsConfig;
+
+import com.google.gson.JsonObject;
 
 import java.util.*;
 
 public class QueryLogic {
+
+    public static String produceQuery(JsonObject jsonObject, FieldsConfig fieldsConfig) {
+        return produceQuery(QueryInferFromJsonLogic.inferCondition(jsonObject, fieldsConfig));
+    }
 
     public static String produceQuery(ConditionBase condition) {
         return Condition.produceByBaseConditionType(condition.getCondition(),
