@@ -19,16 +19,8 @@ public class StringField implements Field {
     }
 
     @Override
-    public boolean isEqual(Field field) {
-        if (!(field instanceof StringField)) {
-            return false;
-        }
-        return this.field.equals(((StringField)field).field);
-    }
-
-    @Override
     public int hashCode() {
-        return this.field.hashCode();
+        return getFieldAsString().hashCode();
     }
 
     @Override

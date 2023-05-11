@@ -6,4 +6,10 @@ public interface Field extends Equable<Field> {
 
     public String getFieldAsString();
 
+    default boolean isEqual(Field field) {
+        validateNotNull(field);
+
+        return getFieldAsString().equals(field.getFieldAsString());
+    }
+
 }
