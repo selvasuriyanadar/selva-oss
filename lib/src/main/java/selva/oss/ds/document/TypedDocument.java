@@ -8,7 +8,7 @@ import selva.oss.ds.field.FieldsConfig;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class TypedDocument<T extends Enum<T>> implements Document<T> {
+public class TypedDocument<T extends Enum<T>> {
 
     private DocumentStore<String> document = DocumentStore.create();
     private Class<T> keyClass;

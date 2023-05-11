@@ -8,17 +8,11 @@ import java.util.*;
 
 interface DocumentExistanceAndEqualityApi<T> {
 
-    default boolean isPresent(T field) {
-        throw new HasNotBeenImplementedException();
-    }
+    public boolean isPresent(T field);
 
-    default boolean isEqual(DocumentStore<T> inData, T field) {
-        throw new HasNotBeenImplementedException();
-    }
+    public boolean isEqual(DocumentStore<T> inData, T field);
 
-    default boolean diffAndCheckIfEdited(DocumentStore<T> inData, T field) {
-        throw new HasNotBeenImplementedException();
-    }
+    public boolean diffAndCheckIfEdited(DocumentStore<T> inData, T field);
 
 }
 

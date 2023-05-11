@@ -8,13 +8,9 @@ import java.util.*;
 
 interface DocumentGetAndSetApi<T> {
 
-    default Optional<Object> getOptional(T field) {
-        throw new HasNotBeenImplementedException();
-    }
+    public Optional<Object> getOptional(T field);
 
-    default Object getSure(T field) {
-        throw new HasNotBeenImplementedException();
-    }
+    public Object getSure(T field);
 
     public void setValue(T field, Object value);
 
