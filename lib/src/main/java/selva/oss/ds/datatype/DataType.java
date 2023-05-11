@@ -1,5 +1,11 @@
 package selva.oss.ds.datatype;
 
+import static selva.oss.lang.operation.DataOrientedOps.ProduceOperation;
+import static selva.oss.lang.operation.DataOrientedOps.UnexpectedType;
+import static selva.oss.lang.operation.DataOrientedOps.catchUnexpectedType;
+import static selva.oss.lang.operation.DataOrientedOps.ReduceOperation;
+import static selva.oss.lang.operation.DataOrientedOps.produceByAll;
+import static selva.oss.lang.operation.DataOrientedOps.ApplyOperation;
 import static selva.oss.lang.Commons.*;
 
 import java.util.*;
@@ -21,6 +27,14 @@ public enum DataType {
 
     // Logic
 
+    public static boolean isStringDataType(DataType dataType) {
+        return Arrays.asList(DataType.String).contains(dataType);
+    }
+
+    public static boolean isNumericalDataType(DataType dataType) {
+        return Arrays.asList(DataType.Long, DataType.Integer, DataType.Float, DataType.Double).contains(dataType);
+    }
+
     public static boolean canDataTypeClassOverride(DataType dataType, Class dataTypeClass) {
         return dataType.getDataTypeClass().isAssignableFrom(dataTypeClass);
     }
@@ -37,23 +51,6 @@ public enum DataType {
         return Arrays.asList(DataType.List).contains(dataType);
     }
 
-    public static class UnexpectedDataTypeType extends RuntimeException {
-    }
-
-    public interface ApplyOperation {
-        public void apply();
-    }
-
-    public static void applyByDataTypeType(DataType dataType, ApplyOperation applyOperationForSimpleDataType, ApplyOperation applyOperationForCollectionDataType) {
-        produceByDataTypeType(dataType,
-                () -> { applyOperationForSimpleDataType.apply(); return new Nothing(); },
-                () -> { applyOperationForCollectionDataType.apply(); return new Nothing(); });
-    }
-
-    public interface ProduceOperation<T> {
-        public T produce();
-    }
-
     public static <T> T produceByDataTypeType(DataType dataType, ProduceOperation<T> produceOperationForSimpleDataType, ProduceOperation<T> produceOperationForCollectionDataType) {
         if (isSimpleDataType(dataType)) {
             return produceOperationForSimpleDataType.produce();
@@ -62,7 +59,7 @@ public enum DataType {
             return produceOperationForCollectionDataType.produce();
         }
         else {
-            throw new UnexpectedDataTypeType();
+            throw new UnexpectedType();
         }
     }
 
@@ -71,25 +68,16 @@ public enum DataType {
             return produceOperationForCollectionDataTypeList.produce();
         }
         else {
-            throw new UnexpectedDataTypeType();
-        }
-    }
-
-    public static <T> Optional<T> catchUnexpectedDataTypeType(ProduceOperation<Optional<T>> produceOperation) {
-        try {
-            return produceOperation.produce();
-        }
-        catch (UnexpectedDataTypeType e) {
-            return Optional.empty();
+            throw new UnexpectedType();
         }
     }
 
     public static <T> T produceByAnyDataTypeType(
             ProduceOperation<Optional<T>> produceOperationForSimpleDataType,
             ProduceOperation<Optional<T>> produceOperationForCollectionDataType) {
-        return catchUnexpectedDataTypeType(produceOperationForSimpleDataType)
-            .orElseGet(() -> catchUnexpectedDataTypeType(produceOperationForCollectionDataType)
-                    .orElseThrow(() -> new UnexpectedDataTypeType()));
+        return catchUnexpectedType(produceOperationForSimpleDataType)
+            .orElseGet(() -> catchUnexpectedType(produceOperationForCollectionDataType)
+                    .orElseThrow(() -> new UnexpectedType()));
     }
 
     public static <T> T produceByAnySimpleDataTypeType(
@@ -107,24 +95,25 @@ public enum DataType {
                             .orElseGet(() -> produceOperationForSimpleDataTypeDouble.produce()
                                 .orElseGet(() -> produceOperationForSimpleDataTypeBoolean.produce()
                                     .orElseGet(() -> produceOperationForSimpleDataTypeEnum.produce()
-                                        .orElseThrow(() -> new UnexpectedDataTypeType())))))));
+                                        .orElseThrow(() -> new UnexpectedType())))))));
     }
 
     public static <T> T produceByAnyCollectionDataTypeType(
             ProduceOperation<Optional<T>> produceOperationForCollectionDataTypeList) {
         return produceOperationForCollectionDataTypeList.produce()
-            .orElseThrow(() -> new UnexpectedDataTypeType());
-    }
-
-    public interface ReduceOperation<T> {
-        public T reduce(T finalResult, T thisResult);
+            .orElseThrow(() -> new UnexpectedType());
     }
 
     public static <T> T produceByAllDataTypeType(ReduceOperation<T> reduceOperation,
             ProduceOperation<T> produceOperationForSimpleDataType,
             ProduceOperation<T> produceOperationForCollectionDataType) {
-        return reduceOperation.reduce(produceOperationForSimpleDataType.produce(),
-                produceOperationForCollectionDataType.produce());
+        return produceByAll(reduceOperation, produceOperationForSimpleDataType, produceOperationForCollectionDataType);
+    }
+
+    public static void applyByDataTypeType(DataType dataType, ApplyOperation applyOperationForSimpleDataType, ApplyOperation applyOperationForCollectionDataType) {
+        produceByDataTypeType(dataType,
+                () -> { applyOperationForSimpleDataType.apply(); return new Nothing(); },
+                () -> { applyOperationForCollectionDataType.apply(); return new Nothing(); });
     }
 
     public static class EnumParams {

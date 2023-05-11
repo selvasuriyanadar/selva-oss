@@ -6,3 +6,4 @@ gradle.properties
 build
 lib/s01.oss.sonatype.org
 *.swp
+/set-java-home.sh

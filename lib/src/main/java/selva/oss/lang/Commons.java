@@ -41,7 +41,7 @@ public class Commons {
     public static class CommonValidationFailedException extends RuntimeException {
 
         public enum CommonValidationFailedState {
-            NullNotExpected, UnexpectedType, CaseNotHandled
+            NullNotExpected, UnexpectedType, CaseNotHandled, MinimumCollectionEntriesExpected
         }
 
         private CommonValidationFailedState commonValidationFailedState;
@@ -81,6 +81,14 @@ public class Commons {
 
         return new CommonValidationFailedException(CommonValidationFailedException.CommonValidationFailedState.CaseNotHandled,
                 "Case " + notHandledCase.toString() + " is not handled.");
+    }
+
+    public static void validateMinimumCollectionEntries(int size, Collection collection) {
+        validateNotNull(collection);
+
+        if (!(collection.size() >= size)) {
+            throw new CommonValidationFailedException(CommonValidationFailedException.CommonValidationFailedState.MinimumCollectionEntriesExpected);
+        }
     }
 
     public static class HasNotBeenImplementedException extends RuntimeException {

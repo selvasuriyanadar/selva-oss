@@ -28,7 +28,7 @@ public class TypedValue implements Equable<TypedValue>, Hashable {
         this.value = value;
     }
 
-    private DataTypeConfig getDataTypeConfig() {
+    public DataTypeConfig getDataTypeConfig() {
         return this.dataTypeConfig;
     }
 
@@ -59,6 +59,10 @@ public class TypedValue implements Equable<TypedValue>, Hashable {
         validateNotNull(dataTypeConfig);
 
         return getDataTypeConfig().equals(dataTypeConfig);
+    }
+
+    public String getValueAsString() {
+        return getValue().toString();
     }
 
     @Override
