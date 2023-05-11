@@ -1,6 +1,8 @@
-package selva.oss.ds.datatype;
+package selva.oss.ds.value;
 
 import static selva.oss.lang.Commons.*;
+import selva.oss.ds.datatype.DataType;
+import selva.oss.ds.datatype.DataTypeConfig;
 
 import java.util.*;
 import java.util.stream.Stream;

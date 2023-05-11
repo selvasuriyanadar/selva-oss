@@ -2,7 +2,7 @@ package selva.oss.ds.field;
 
 import static selva.oss.lang.Commons.*;
 import selva.oss.ds.datatype.DataTypeConfig;
-import selva.oss.ds.datatype.TypedValue;
+import selva.oss.ds.value.TypedValue;
 
 import java.util.*;
 import java.util.stream.Stream;
