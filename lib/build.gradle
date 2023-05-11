@@ -38,6 +38,8 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
 }
 
 tasks.named('test') {

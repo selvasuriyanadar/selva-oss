@@ -46,6 +46,38 @@ public class DataOrientedOps {
         return result;
     }
 
+    public interface InitialReduceOperation<T, R> {
+        public R reduce(T oldValue, T newValue);
+    }
+
+    public interface Accumulator<T, R> {
+        public void accumulate(T value, R result);
+    }
+
+    private static class Result<R> {
+        public Optional<R> result = Optional.empty();
+    }
+
+    public static <T, R> R produceByAll(InitialReduceOperation<T, R> reduceOperation, Accumulator<T, R> accumulator,
+            ProduceOperation<T>... produceOperations) {
+        Result<R> result = new Result<R>();
+        produceByAll((oldValue, newValue) -> {
+            if (!result.result.isPresent()) {
+                result.result = Optional.of(reduceOperation.reduce(oldValue, newValue));
+                return newValue;
+            }
+            else {
+                accumulator.accumulate(newValue, result.result.get());
+                return newValue;
+            }
+        }, produceOperations);
+
+        if (!result.result.isPresent()) {
+            throw new NothingToProduceException();
+        }
+        return result.result.get();
+    }
+
     public interface ApplyOperation {
         public void apply();
     }

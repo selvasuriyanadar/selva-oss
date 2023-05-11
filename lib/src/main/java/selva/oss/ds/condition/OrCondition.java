@@ -6,8 +6,8 @@ import java.util.*;
 
 public class OrCondition extends MultiBooleanCondition {
 
-    public OrCondition(List<ConditionBase> condition) {
-        super(condition);
+    public OrCondition(List<ConditionBase> conditions) {
+        super(conditions);
     }
 
     @Override

@@ -4,8 +4,8 @@ import java.util.*;
 
 public class AndCondition extends MultiBooleanCondition {
 
-    public AndCondition(List<ConditionBase> condition) {
-        super(condition);
+    public AndCondition(List<ConditionBase> conditions) {
+        super(conditions);
     }
 
     @Override

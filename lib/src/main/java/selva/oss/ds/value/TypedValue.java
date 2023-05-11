@@ -4,6 +4,8 @@ import static selva.oss.lang.Commons.*;
 import selva.oss.ds.datatype.DataType;
 import selva.oss.ds.datatype.DataTypeConfig;
 
+import com.google.gson.JsonElement;
+
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -11,6 +13,14 @@ public class TypedValue implements Equable<TypedValue>, Hashable {
 
     private Object value;
     private DataTypeConfig dataTypeConfig;
+
+    public TypedValue(DataTypeConfig dataTypeConfig, JsonElement value) {
+        validateNotNull(dataTypeConfig);
+        validateNotNull(value);
+
+        this.dataTypeConfig = dataTypeConfig;
+        this.value = TypedValueConvertFromGsonElementLogic.convert(dataTypeConfig, value);
+    }
 
     public TypedValue(Object value) {
         TypedValueLogic.validateValueExistDynamic(value);
@@ -62,7 +72,7 @@ public class TypedValue implements Equable<TypedValue>, Hashable {
     }
 
     public String getValueAsString() {
-        return getValue().toString();
+        return TypedValueToStringLogic.toString(getDataTypeConfig(), getValue());
     }
 
     @Override

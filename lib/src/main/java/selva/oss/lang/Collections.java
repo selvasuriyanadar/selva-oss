@@ -2,6 +2,7 @@ package selva.oss.lang;
 
 import java.util.*;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Collections {
 
@@ -46,6 +47,11 @@ public class Collections {
 
     public static <T> T getCircular(List<T> collection, int index) {
         return collection.get(index % collection.size());
+    }
+
+    public static <T> Stream<T> streamIterator(Iterator<T> iterator) {
+        Iterable<T> iterable = () -> iterator;
+        return StreamSupport.stream(iterable.spliterator(), false);
     }
 
 }

@@ -6,16 +6,20 @@ import java.util.*;
 
 public abstract class MultiBooleanCondition extends BooleanCondition {
 
-    protected List<ConditionBase> condition;
+    protected List<ConditionBase> conditions;
 
-    public MultiBooleanCondition(List<ConditionBase> condition) {
-        validateMinimumCollectionEntries(2, condition);
+    public MultiBooleanCondition(List<ConditionBase> conditions) {
+        validateMinimumCollectionEntries(2, conditions);
 
-        this.condition = condition;
+        this.conditions = new ArrayList<>(conditions);
+    }
+
+    public void add(ConditionBase condition) {
+        this.conditions.add(condition);
     }
 
     public List<ConditionBase> getSubConditions() {
-        return new ArrayList<>(this.condition);
+        return new ArrayList<>(this.conditions);
     }
 
 }

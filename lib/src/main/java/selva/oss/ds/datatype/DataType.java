@@ -63,13 +63,31 @@ public enum DataType {
         }
     }
 
+    public static <T> T produceBySimpleDataTypeType(DataType dataType,
+            ProduceOperation<T> produceOperationForSimpleDataTypeString,
+            ProduceOperation<T> produceOperationForSimpleDataTypeLong,
+            ProduceOperation<T> produceOperationForSimpleDataTypeInteger,
+            ProduceOperation<T> produceOperationForSimpleDataTypeFloat,
+            ProduceOperation<T> produceOperationForSimpleDataTypeDouble,
+            ProduceOperation<T> produceOperationForSimpleDataTypeBoolean,
+            ProduceOperation<T> produceOperationForSimpleDataTypeEnum) {
+        return switch (dataType) {
+            case String -> produceOperationForSimpleDataTypeString.produce();
+            case Long -> produceOperationForSimpleDataTypeLong.produce();
+            case Integer -> produceOperationForSimpleDataTypeInteger.produce();
+            case Float -> produceOperationForSimpleDataTypeFloat.produce();
+            case Double -> produceOperationForSimpleDataTypeDouble.produce();
+            case Boolean -> produceOperationForSimpleDataTypeBoolean.produce();
+            case Enum -> produceOperationForSimpleDataTypeEnum.produce();
+            default -> throw new UnexpectedType();
+        };
+    }
+
     public static <T> T produceByCollectionDataTypeType(DataType dataType, ProduceOperation<T> produceOperationForCollectionDataTypeList) {
-        if (dataType == DataType.List) {
-            return produceOperationForCollectionDataTypeList.produce();
-        }
-        else {
-            throw new UnexpectedType();
-        }
+        return switch (dataType) {
+            case List -> produceOperationForCollectionDataTypeList.produce();
+            default -> throw new UnexpectedType();
+        };
     }
 
     public static <T> T produceByAnyDataTypeType(

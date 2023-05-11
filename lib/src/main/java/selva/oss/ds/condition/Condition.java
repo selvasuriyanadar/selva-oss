@@ -42,11 +42,11 @@ public enum Condition {
         return Arrays.asList(Condition.Equals, Condition.NotEquals, Condition.GreaterThan, Condition.GreaterThanOrEquals, Condition.LesserThan, Condition.LesserThanOrEquals).contains(condition);
     }
 
-    public static boolean isRelativeComparativeCondition(Condition condition) {
+    public static boolean isSimpleComparativeCondition(Condition condition) {
         return Arrays.asList(Condition.Equals, Condition.NotEquals).contains(condition);
     }
 
-    public static boolean isSimpleComparativeCondition(Condition condition) {
+    public static boolean isRelativeComparativeCondition(Condition condition) {
         return Arrays.asList(Condition.GreaterThan, Condition.GreaterThanOrEquals, Condition.LesserThan, Condition.LesserThanOrEquals).contains(condition);
     }
 
@@ -89,19 +89,19 @@ public enum Condition {
         };
     }
 
-    public static <T> T produceByComparativeConditionType(Condition condition, ProduceOperation<T> produceOperationForRelativeComparativeCondition, ProduceOperation<T> produceOperationForSimpleComparativeCondition) {
-        if (isRelativeComparativeCondition(condition)) {
-            return produceOperationForRelativeComparativeCondition.produce();
-        }
-        else if (isSimpleComparativeCondition(condition)) {
+    public static <T> T produceByComparativeConditionType(Condition condition, ProduceOperation<T> produceOperationForSimpleComparativeCondition, ProduceOperation<T> produceOperationForRelativeComparativeCondition) {
+        if (isSimpleComparativeCondition(condition)) {
             return produceOperationForSimpleComparativeCondition.produce();
+        }
+        else if (isRelativeComparativeCondition(condition)) {
+            return produceOperationForRelativeComparativeCondition.produce();
         }
         else {
             throw new UnexpectedType();
         }
     }
 
-    public static <T> T produceByRelativeComparativeConditionType(Condition condition, ProduceOperation<T> produceOperationForEqualsCondition, ProduceOperation<T> produceOperationForNotEqualsCondition) {
+    public static <T> T produceBySimpleComparativeConditionType(Condition condition, ProduceOperation<T> produceOperationForEqualsCondition, ProduceOperation<T> produceOperationForNotEqualsCondition) {
         return switch (condition) {
             case Equals -> produceOperationForEqualsCondition.produce();
             case NotEquals -> produceOperationForNotEqualsCondition.produce();
@@ -109,7 +109,7 @@ public enum Condition {
         };
     }
 
-    public static <T> T produceBySimpleComparativeConditionType(Condition condition, ProduceOperation<T> produceOperationForGreaterThanCondition, ProduceOperation<T> produceOperationForGreaterThanOrEqualsCondition, ProduceOperation<T> produceOperationForLesserThanCondition, ProduceOperation<T> produceOperationForLesserThanOrEqualsCondition) {
+    public static <T> T produceByRelativeComparativeConditionType(Condition condition, ProduceOperation<T> produceOperationForGreaterThanCondition, ProduceOperation<T> produceOperationForGreaterThanOrEqualsCondition, ProduceOperation<T> produceOperationForLesserThanCondition, ProduceOperation<T> produceOperationForLesserThanOrEqualsCondition) {
         return switch (condition) {
             case GreaterThan -> produceOperationForGreaterThanCondition.produce();
             case GreaterThanOrEquals -> produceOperationForGreaterThanOrEqualsCondition.produce();
