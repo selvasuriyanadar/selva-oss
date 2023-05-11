@@ -4,6 +4,7 @@ import static selva.oss.lang.Commons.*;
 import selva.oss.ds.datatype.DataTypeConfig;
 import selva.oss.ds.value.TypedValue;
 import selva.oss.ds.field.FieldsConfig;
+import selva.oss.ds.field.EnumField;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -19,7 +20,7 @@ public class TypedDocument<T extends Enum<T>> {
         this.keyClass = keyClass;
     }
 
-    public TypedDocument(Class<T> keyClass, FieldsConfig<T> fieldsConfig) {
+    public TypedDocument(Class<T> keyClass, FieldsConfig fieldsConfig) {
         this(keyClass);
         validateNotNull(fieldsConfig);
 
@@ -40,8 +41,8 @@ public class TypedDocument<T extends Enum<T>> {
         initialiseFromStore(store);
     }
 
-    private void initialiseFromFieldsConfig(FieldsConfig<T> fieldsConfig) {
-        streamExpectedFields().forEach(field -> { getDocument().defineFieldType(fieldsConfig.fetchSure(field)); });
+    private void initialiseFromFieldsConfig(FieldsConfig fieldsConfig) {
+        streamExpectedFields().forEach(field -> { getDocument().defineFieldType(fieldsConfig.fetchSure(new EnumField<T>(field))); });
     }
 
     private void initialiseFromStore(Store<String> store) {

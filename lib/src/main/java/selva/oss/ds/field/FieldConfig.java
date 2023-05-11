@@ -7,12 +7,12 @@ import selva.oss.ds.value.TypedValue;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class FieldConfig<T> {
+public class FieldConfig {
 
-    private T field;
+    private Field field;
     private DataTypeConfig dataTypeConfig;
 
-    public FieldConfig(T field, DataTypeConfig dataTypeConfig) {
+    public FieldConfig(Field field, DataTypeConfig dataTypeConfig) {
         validateNotNull(field);
         validateNotNull(dataTypeConfig);
 
@@ -20,12 +20,12 @@ public class FieldConfig<T> {
         this.dataTypeConfig = dataTypeConfig;
     }
 
-    public T getField() {
+    public Field getField() {
         return this.field;
     }
 
     public String getFieldAsString() {
-        return this.field.toString();
+        return this.field.getFieldAsString();
     }
 
     public DataTypeConfig getDataTypeConfig() {

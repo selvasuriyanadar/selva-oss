@@ -7,11 +7,19 @@ import selva.oss.ds.value.TypedValue;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class FieldsConfig<T> {
+public class FieldsConfig {
 
-    private Map<T, FieldConfig> configs = new HashMap<>();
+    private Map<Field, FieldConfig> configs = new HashMap<>();
 
-    public FieldsConfig add(T field, DataTypeConfig dataTypeConfig) {
+    public FieldsConfig add(String field, DataTypeConfig dataTypeConfig) {
+        return add(new StringField(field), dataTypeConfig);
+    }
+
+    public <E extends Enum<E>> FieldsConfig add(E field, DataTypeConfig dataTypeConfig) {
+        return add(new EnumField<E>(field), dataTypeConfig);
+    }
+
+    public FieldsConfig add(Field field, DataTypeConfig dataTypeConfig) {
         validateNotNull(field);
 
         configs.put(field, new FieldConfig(field, dataTypeConfig));
@@ -25,7 +33,7 @@ public class FieldsConfig<T> {
     public static class ConfigDoesNotExistException extends RuntimeException {
     }
 
-    public FieldConfig fetchSure(T field) {
+    public FieldConfig fetchSure(Field field) {
         if (!configs.containsKey(field)) {
             throw new ConfigDoesNotExistException();
         }
