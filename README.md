@@ -28,6 +28,9 @@ please refer to the QuerTest file for usage information.
  
  * customize the representation of the conditions in the query output.
  * customize the representation of the constants and named fields in the query output.
+ * support more data types and conditions.
+
+
 
 Thank you ❤️
 
