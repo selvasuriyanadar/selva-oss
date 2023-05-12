@@ -7,7 +7,7 @@
 
 ***Query generator***
 
-please refer to the QuerTest file for usage information.
+please refer to the QueryTest file for usage information.
 
 **what it has to offer:**
 
