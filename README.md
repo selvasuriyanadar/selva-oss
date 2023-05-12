@@ -9,6 +9,12 @@
 
 please refer to the QueryTest file for usage information.
 
+**use cases**
+
+* a library similar to react query builder but for use from the backend.
+* you can allow users to better filter the data delivered based on multiple filter conditions.
+* just get the filters selected by the user and send that to this lib in the required json format you are done, it will generate the query (where condition) which you can use to query the data from the database.
+
 **what it has to offer:**
 
 * supports named fields and constants as arguments.
@@ -27,6 +33,8 @@ please refer to the QueryTest file for usage information.
 **in development:**
 
 * converting to sql template for using with jdbc.
+* composite conditions
+* customizable templates
 
  If you find this useful I am more than happy to develop more useful features on top of it, the following are some ideas for feature requests.
  
