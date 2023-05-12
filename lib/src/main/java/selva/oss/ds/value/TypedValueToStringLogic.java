@@ -8,6 +8,8 @@ import selva.oss.lang.Collections;
 import selva.oss.ds.datatype.DataType;
 import selva.oss.ds.datatype.DataTypeConfig;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
@@ -27,7 +29,7 @@ public class TypedValueToStringLogic {
 
     private static String toStringBySimpleDataType(DataTypeConfig dataTypeConfig, Object value) {
         return DataType.produceBySimpleDataTypeType(dataTypeConfig.getDataType(),
-                () -> "'" + value.toString() + "'",
+                () -> "'" + StringEscapeUtils.escapeJava(value.toString()) + "'",
                 () -> value.toString(),
                 () -> value.toString(),
                 () -> value.toString(),
