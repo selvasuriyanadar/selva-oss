@@ -7,7 +7,7 @@
 
 ***Query generator***
 
-please refer to the QueryTest file for usage information.
+please refer to the [QueryTest](https://github.com/selvasuriyanadar/selva-oss/blob/master/lib/src/test/groovy/selva/oss/ds/document/QueryTest.groovy) file for usage information.
 
 **use cases**
 
